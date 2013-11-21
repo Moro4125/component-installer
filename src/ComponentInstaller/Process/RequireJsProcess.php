@@ -152,6 +152,16 @@ class RequireJsProcess extends Process
     {
         // Aggregate all the assets into one file.
         $assets = new AssetCollection();
+        if ($this->config->has('component-scriptFilters')) {
+            $filters = $this->config->get('component-scriptFilters');
+            if (isset($filters) && is_array($filters)) {
+                foreach ($filters as $filter => $filterParams) {
+                    $reflection = new \ReflectionClass($filter);
+                    $assets->ensureFilter($reflection->newInstanceArgs($filterParams));
+                }
+            }
+        }
+
         foreach ($scripts as $script) {
             // Collect each candidate from a glob file search.
             $path = $this->getVendorDir($package).DIRECTORY_SEPARATOR.$script;
