@@ -29,9 +29,19 @@ class RequireCssProcess extends Process
      */
     public function process()
     {
-        $filters = new FilterCollection(array(
-            new CssRewriteFilter(),
-        ));
+        $filters = array(new CssRewriteFilter());
+        if ($this->config->has('component-styleFilters')) {
+            $customFilters = $this->config->get('component-styleFilters');
+            if (isset($customFilters) && is_array($customFilters)) {
+                foreach ($customFilters as $filter => $filterParams) {
+                    $reflection = new \ReflectionClass($filter);
+                    $filters[] = $reflection->newInstanceArgs($filterParams);
+                }
+            }
+        }
+
+        $filterCollection = new FilterCollection($filters);
+
         $assets = new AssetCollection();
         $styles = $this->packageStyles($this->packages);
         foreach ($styles as $package => $packageStyles) {
@@ -46,7 +56,7 @@ class RequireCssProcess extends Process
                     // Where the final CSS will be generated.
                     $targetPath = $this->componentDir;
                     // Build the asset and add it to the collection.
-                    $asset = new FileAsset($assetPath, $filters, $sourceRoot, $sourcePath);
+                    $asset = new FileAsset($assetPath, $filterCollection, $sourceRoot, $sourcePath);
                     $asset->setTargetPath($targetPath);
                     $assets->add($asset);
                 }
