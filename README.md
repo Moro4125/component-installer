@@ -2,17 +2,37 @@
 
 Allows installation of Components via [Composer](http://getcomposer.org).
 
-## Usage
+## Install
 
-To install a Component with Composer, add the Component to your *composer.json*
-`require` key. The following will install both [jQuery](http://jquery.com) and
-[normalize.css](http://necolas.github.io/normalize.css/):
+```
+composer require robloach/component-installer
+```
 
 ``` json
 {
     "require": {
-        "components/jquery": "1.9.*",
-        "components/normalize.css": "2.*"
+        "robloach/component-installer": "*"
+    }
+}
+```
+
+## Usage
+
+To install a Component with Composer, add the Component to your *composer.json*
+`require` key. The following will install [jQuery](http://jquery.com) and
+[normalize.css](https://github.com/necolas/normalize.css):
+
+```
+composer require components/jquery
+composer require components/normalize.css
+```
+
+``` json
+{
+    "require": {
+        "components/jquery": "2.*",
+        "components/normalize.css": "3.*",
+        "robloach/component-installer": "*"
     }
 }
 ```
@@ -24,7 +44,7 @@ Components manually using a `script` or `link` tag:
 
 ``` html
 <script src="components/jquery/jquery.js"></script>
-<link href="components/normalize/normalize.css" rel="stylesheet" type="text/css">
+<link href="components/normalize/normalize.css" rel="stylesheet">
 ```
 
 For complex projects, a [RequireJS](http://requirejs.org) configuration is
@@ -285,33 +305,13 @@ Using `extra` with packages that ship with Component Installer, will override co
 }
 ```
 
-### Backwards Compatibility
-
-Newer versions of composer made backwards incompatible changes to the way
-plugins work. In order for `components-installer` to work on newer versions of
-composer, a backwards incompatibile fix had to be made. If you are using an
-older version of composer, please make sure to explicitly require version
-`0.0.12` in your root `composer.json` file. Example:
-
-``` json
-{
-    "require": {
-	"robloach/component-installer": "0.0.12",
-        "components/jquery": "*"
-    },
-    "config": {
-        "component-dir": "public"
-    }
-}
-```
-
 ## Not Invented Here
 
 There are many other amazing projects from which Component Installer was
 inspired. It is encouraged to take a look at some of the [other great package
 management systems](http://github.com/wilmoore/frontend-packagers):
 * [npm](http://npmjs.org)
-* [bower](http://twitter.github.com/bower/)
+* [bower](http://bower.io/)
 * [component](http://github.com/component/component)
 * [Jam](http://jamjs.org)
 * [volo](http://volojs.org)
