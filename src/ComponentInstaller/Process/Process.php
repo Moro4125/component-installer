@@ -107,6 +107,17 @@ class Process implements ProcessInterface
         $rootExtras = $rootPackage ? $rootPackage->getExtra() : array();
         $customComponents = isset($rootExtras['component']) ? $rootExtras['component'] : array();
         foreach ($allPackages as $package) {
+            if (isset($package['extra']['component']) && is_array($package['extra']['component'])) {
+                unset($package['extra']['component']['name']);
+                unset($package['extra']['component']['scripts']);
+                unset($package['extra']['component']['styles']);
+                unset($package['extra']['component']['files']);
+                unset($package['extra']['component']['shim']);
+                unset($package['extra']['component']['config']);
+                $customComponents = array_merge($package['extra']['component'], $customComponents);
+            }
+        }
+        foreach ($allPackages as $package) {
             $name = $package['name'];
             if (isset($customComponents[$name]) && is_array($customComponents[$name])) {
                 $package['extra'] = array('component' => $customComponents[$name]);
